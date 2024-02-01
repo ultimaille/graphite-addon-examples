@@ -27,7 +27,7 @@ include(FetchContent)
 FetchContent_Declare(
   ultimaille
   GIT_REPOSITORY https://github.com/ssloy/ultimaille
-  GIT_TAG        master
+  GIT_TAG        v1.1.0
 )
 FetchContent_MakeAvailable(ultimaille)
 
