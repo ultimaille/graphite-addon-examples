@@ -1,6 +1,9 @@
 name: Continuous
 
-on: [push]
+on: 
+  push:
+  create:
+    tags:
 
 jobs:
 
@@ -30,6 +33,19 @@ jobs:
 
     - name: Run executable
       run: build/delete_face_addon model=build/catorus.geogram facet_index=0
+
+    -
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      name: Deploy
+      uses: xresloader/upload-to-github-release@v1
+      with:
+        draft: false
+        file: build/*
+        overwrite: true
+        update_latest_release: true
+        verbose: true
+      if: "startsWith(github.ref, 'refs/tags/')"
 
 
   windows-msvc:
