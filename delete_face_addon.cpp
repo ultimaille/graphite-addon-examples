@@ -1,5 +1,5 @@
 #include <ultimaille/all.h>
-#include <lib/param_parser.h>
+#include <param_parser/param_parser.h>
 
 using namespace UM;
 
@@ -9,7 +9,6 @@ int main(int argc, char** argv) {
     Parameters params;
 
     // Add program parameters
-    /* params.add(type, name, default_value) */
     params.add("input", "model", "").description("Model to process");
     params.add("int", "facet_index", "0").description("Facet index to remove");
 
@@ -38,7 +37,7 @@ int main(int argc, char** argv) {
     if (!std::filesystem::is_directory("output"))
         std::filesystem::create_directories("output");
 
-    std::string file = std::filesystem::path(filename).filename();    
+    std::string file = std::filesystem::path(filename).filename().string();
     
     std::string out_filename = "output/" + file;
     write_by_extension(out_filename, m);
