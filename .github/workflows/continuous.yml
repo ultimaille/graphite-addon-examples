@@ -41,7 +41,7 @@ jobs:
         tags: true
         draft: false
         file: build/delete_facet_addon-${{ matrix.cfg.os }}
-        overwrite: true
+        overwrite: false
         update_latest_release: true
         verbose: true
 
