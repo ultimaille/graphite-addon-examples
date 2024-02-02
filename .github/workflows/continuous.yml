@@ -1,0 +1,56 @@
+name: Continuous
+
+on: [push]
+
+jobs:
+
+  linux-mac:
+    strategy:
+      matrix:
+        cfg: [{os: ubuntu-latest, cxx: g++-12},
+              {os: ubuntu-latest, cxx: g++-9},
+              {os: macos-latest, cxx: clang++}]
+        config: [Release, Debug]
+
+    runs-on:  ${{ matrix.cfg.os }}
+
+    env:
+      CXX: ${{ matrix.cfg.cxx }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+
+    - name: CMake Build
+      run: cmake --build build --parallel
+
+    - name: Run executable
+      run: build/delete_face_addon model=build/catorus.geogram facet_index=0
+
+
+  windows-msvc:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Configure CMake
+      run: cmake -B build
+
+    - name: Release build
+      run: cmake --build build --parallel --config Release
+
+    - name: Release run
+      run: build/Release/delete_face_addon.exe model=build/catorus.geogram facet_index=0
+
+    - name: Debug build
+      run: cmake --build build --parallel --config Debug
+
+    - name: Debug run
+      run: build/Debug/delete_face_addon.exe model=build/catorus.geogram facet_index=0
