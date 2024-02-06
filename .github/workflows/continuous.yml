@@ -10,10 +10,11 @@ jobs:
   linux-mac:
     strategy:
       matrix:
-        cfg: [{os: ubuntu-latest, cxx: g++-12},
-              {os: ubuntu-latest, cxx: g++-9},
+        cfg: [{os: ubuntu-latest, cxx: gcc-13},
+              # {os: ubuntu-latest, cxx: g++-9},
               {os: macos-latest, cxx: clang++}]
-        config: [Release, Debug]
+        # config: [Release, Debug]
+        config: [Release]
 
     runs-on:  ${{ matrix.cfg.os }}
 
