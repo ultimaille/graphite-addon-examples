@@ -33,19 +33,28 @@ include_directories(${ultimaille_SOURCE_DIR})
 include_directories(${param_parser_SOURCE_DIR})
 
 # Add executable binary
-add_executable(delete_face_addon delete_face_addon.cpp)
+add_executable(delete_facet_addon delete_face_addon.cpp)
+add_executable(smoother_addon smoother_addon.cpp)
 
 # Link binary with ultimaille / param-parser
-target_link_libraries(delete_face_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
+target_link_libraries(delete_facet_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
+target_link_libraries(smoother_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 
 IF (NOT WIN32)
-	target_link_libraries(delete_face_addon m)
+	target_link_libraries(delete_facet_addon m)
+	target_link_libraries(smoother_addon m)
 ENDIF()
 
 set_target_properties(
-    delete_face_addon
+  delete_facet_addon
     PROPERTIES 
-        OUTPUT_NAME "delete_facet_addon-${OSName}"
+        OUTPUT_NAME "delete_facet_addon_${OSName}"
+)
+
+set_target_properties(
+  smoother_addon
+    PROPERTIES 
+        OUTPUT_NAME "smoother_addon_${OSName}"
 )
 
 

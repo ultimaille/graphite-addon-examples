@@ -32,7 +32,7 @@ jobs:
       run: cmake --build build --parallel
 
     - name: Run executable
-      run: build/delete_facet_addon-${{ matrix.cfg.os }} model=build/catorus.geogram facet_index=0
+      run: build/delete_facet_addon_${{ matrix.cfg.os }} model=build/catorus.geogram facet_index=0
 
     -
       name: Deploy
@@ -40,7 +40,7 @@ jobs:
       with:
         tags: true
         draft: false
-        file: build/delete_facet_addon-${{ matrix.cfg.os }}
+        file: build/delete_facet_addon_${{ matrix.cfg.os }};build/smoother_addon_${{ matrix.cfg.os }}
         overwrite: false
         update_latest_release: true
         verbose: true
@@ -61,13 +61,13 @@ jobs:
       run: cmake --build build --parallel --config Release
 
     - name: Release run
-      run: build/Release/delete_facet_addon-win.exe model=build/catorus.geogram facet_index=0
+      run: build/Release/delete_facet_addon_win.exe model=build/catorus.geogram facet_index=0
 
     - name: Debug build
       run: cmake --build build --parallel --config Debug
 
     - name: Debug run
-      run: build/Debug/delete_facet_addon-win.exe model=build/catorus.geogram facet_index=0
+      run: build/Debug/delete_facet_addon_win.exe model=build/catorus.geogram facet_index=0
 
     -
       name: Deploy
@@ -75,7 +75,7 @@ jobs:
       with:
         tags: true
         draft: false
-        file: build/Release/delete_facet_addon-win.exe
+        file: build/Release/delete_facet_addon_win.exe;build/Release/smoother_addon_win.exe
         overwrite: true
         update_latest_release: true
         verbose: true
