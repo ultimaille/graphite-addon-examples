@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.12...3.26)
 project(graphite-addon-examples LANGUAGES C CXX )
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_BUILD_RPATH_USE_ORIGIN TRUE)
 
 message("OSName=" ${OSName})
 
@@ -27,6 +28,8 @@ FetchContent_Declare(
   GIT_TAG        master
 )
 FetchContent_MakeAvailable(param_parser)
+
+
 
 # Add ultimaille directory to get ultimaille CMakeLists
 include_directories(${ultimaille_SOURCE_DIR})

@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
 
     // Add program parameters
     params.add("input", "model", "").description("Model to process");
-    params.add(Parameters::ParamType::vertices(Parameters::ParamType::Bool, 1), "lock_attribute", "").description("Name of attribute to lock");
-    params.add(Parameters::ParamType::Int, "n_iter", "100").description("Number of iterations");
+    params.add(Parameters::Type::VerticesBool(1), "lock_attribute", "").description("Name of attribute to lock");
+    params.add(Parameters::Type::Int, "n_iter", "100").description("Number of iterations");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);
