@@ -34,13 +34,15 @@ jobs:
     - name: Run executable
       run: build/delete_facet_addon_${{ matrix.cfg.os }} model=build/catorus.geogram facet_index=0
 
+    - name: Create archive
+      run: tar -czvf addon_examples_${{ matrix.cfg.os }}.tar.gz build/delete_facet_addon_${{ matrix.cfg.os }} build/smoother_addon_${{ matrix.cfg.os }} build/lib/*
     -
       name: Deploy
       uses: xresloader/upload-to-github-release@v1
       with:
         tags: true
         draft: false
-        file: build/delete_facet_addon_${{ matrix.cfg.os }};build/smoother_addon_${{ matrix.cfg.os }}
+        file: addon_examples_${{ matrix.cfg.os }}.tar.gz
         overwrite: false
         update_latest_release: true
         verbose: true
