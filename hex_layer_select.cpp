@@ -142,48 +142,48 @@ int main(int argc, char** argv) {
     propagate_layer(layer_attr, h);
 
 
-    // Find all layers
-    const int nhalfedges = m.ncells() * 24; 
-    DisjointSet ds(nhalfedges);
-    get_layer(ds, m);
+    // // Find all layers
+    // const int nhalfedges = m.ncells() * 24; 
+    // DisjointSet ds(nhalfedges);
+    // get_layer(ds, m);
 
-    std::vector<int> setIds(nhalfedges);
+    // std::vector<int> setIds(nhalfedges);
 
-    ds.get_sets_id(setIds);
+    // ds.get_sets_id(setIds);
 
 
-    std::cout << ds.nsets() << std::endl;
+    // std::cout << ds.nsets() << std::endl;
 
-    bool ok[ds.nsets()] = {false};
+    // bool ok[ds.nsets()] = {false};
 
     
-    int ngroup = 0;
-    for (int i = 0; i < setIds.size(); i++) {
-        int groupId = setIds[i];
-        if (ok[groupId])
-            continue;
+    // int ngroup = 0;
+    // for (int i = 0; i < setIds.size(); i++) {
+    //     int groupId = setIds[i];
+    //     if (ok[groupId])
+    //         continue;
         
-        ngroup++;
-        ok[groupId] = true;
+    //     ngroup++;
+    //     ok[groupId] = true;
 
-        for (int j = 0; j < setIds.size(); j++) {
-            if (setIds[j] == groupId) {
-                Volume::Halfedge h(m, j);
-                layers_0[h.cell()] = groupId;
-            }
-        }
-    }
+    //     for (int j = 0; j < setIds.size(); j++) {
+    //         if (setIds[j] == groupId) {
+    //             Volume::Halfedge h(m, j);
+    //             layers_0[h.cell()] = groupId;
+    //         }
+    //     }
+    // }
 
-    std::cout << "n group: " << ngroup << std::endl;
+    // std::cout << "n group: " << ngroup << std::endl;
     
-    for (int groupId = 0; groupId < ds.nsets(); groupId++) {
-        for (int j = 0; j < setIds.size(); j++) {
-            if (setIds[j] == groupId) {
-                Volume::Halfedge h(m, j);
-                layers_0[h.cell()] = groupId;
-            }
-        }
-    }
+    // for (int groupId = 0; groupId < ds.nsets(); groupId++) {
+    //     for (int j = 0; j < setIds.size(); j++) {
+    //         if (setIds[j] == groupId) {
+    //             Volume::Halfedge h(m, j);
+    //             layers_0[h.cell()] = groupId;
+    //         }
+    //     }
+    // }
 
 
 
