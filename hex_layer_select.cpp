@@ -56,16 +56,17 @@ int main(int argc, char** argv) {
     // Add program parameters
     params.add("input", "model", "").description("Model to process");
     params.add("int", "edge", "").description("Edge local index");
+    params.add("string", "layer_attr_name", "layer").description("Output layer attribute name");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);
 
     // Print
-    std::string s = params["model"];
-    std::cout << "Input model: " << s << std::endl;
-
     std::string filename = params["model"];
     int e_idx = params["edge"];
+    std::string layer_attr_name = params["layer_attr_name"];
+
+    std::cout << "Input model: " << filename << std::endl;
 
     // Open model
     Hexahedra m;
@@ -84,22 +85,22 @@ int main(int argc, char** argv) {
     propagate_layer(layer_attr, h);
 
 
-    // Find all layers
-    const int nhalfedges = m.ncells() * 24; 
-    DisjointSet ds(nhalfedges);
-    get_layer(ds, m);
+    // // Find all layers
+    // const int nhalfedges = m.ncells() * 24; 
+    // DisjointSet ds(nhalfedges);
+    // get_layer(ds, m);
 
-    std::vector<int> setIds(nhalfedges);
-    ds.get_sets_id(setIds);
+    // std::vector<int> setIds(nhalfedges);
+    // ds.get_sets_id(setIds);
 
-    const int groupId = setIds[h];
+    // const int groupId = setIds[h];
 
-    for (int j = 0; j < setIds.size(); j++) {
-        if (setIds[j] == groupId) {
-            Volume::Halfedge h(m, j);
-            layers_attr_ds[h.cell()] = true;
-        }
-    }
+    // for (int j = 0; j < setIds.size(); j++) {
+    //     if (setIds[j] == groupId) {
+    //         Volume::Halfedge h(m, j);
+    //         layers_attr_ds[h.cell()] = true;
+    //     }
+    // }
 
     std::cout << "end." << std::endl;
 
@@ -111,7 +112,7 @@ int main(int argc, char** argv) {
     std::string file = std::filesystem::path(filename).filename().string();
     
     std::string out_filename = "output/" + file;
-    write_by_extension(out_filename, m, {{}, {{"layer", layer_attr.ptr}, {"filter", layer_attr.ptr}, {"layer_ds", layers_attr_ds.ptr}}, {}, {}});
+    write_by_extension(out_filename, m, {{}, {{layer_attr_name, layer_attr.ptr}, {"filter", layer_attr.ptr}, {layer_attr_name + "_ds", layers_attr_ds.ptr}}, {}, {}});
     
     std::cout << "save model to " << out_filename << std::endl;
 
