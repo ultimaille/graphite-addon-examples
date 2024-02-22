@@ -61,17 +61,17 @@ int main(int argc, char** argv) {
     /* Parse program arguments */
     params.init_from_args(argc, argv);
 
-    // Print
     std::string filename = params["model"];
     int e_idx = params["edge"];
     std::string layer_attr_name = params["layer_attr_name"];
 
+    // Print
     std::cout << "Input model: " << filename << std::endl;
 
     // Open model
     Hexahedra m;
     VolumeAttributes attr = read_by_extension(filename, m);
-
+    
     // Connect mesh
     m.connect();
     
@@ -83,7 +83,6 @@ int main(int argc, char** argv) {
 
     // Extract layer
     propagate_layer(layer_attr, h);
-
 
     // // Find all layers
     // const int nhalfedges = m.ncells() * 24; 
@@ -104,6 +103,16 @@ int main(int argc, char** argv) {
 
     std::cout << "end." << std::endl;
 
+    // Keep old cell attributes except filter & lace
+    std::vector<UM::NamedContainer> cells_attr;
+    for (auto a : attr.cells) {
+        if (a.first != layer_attr_name && a.first != "filter")
+            cells_attr.push_back(a);
+    }
+    cells_attr.push_back({layer_attr_name, layer_attr.ptr});
+    cells_attr.push_back({"filter", layer_attr.ptr});
+    attr.cells = cells_attr;
+
 
     // Output model
     if (!std::filesystem::is_directory("output"))
@@ -112,7 +121,7 @@ int main(int argc, char** argv) {
     std::string file = std::filesystem::path(filename).filename().string();
     
     std::string out_filename = "output/" + file;
-    write_by_extension(out_filename, m, {{}, {{layer_attr_name, layer_attr.ptr}, {"filter", layer_attr.ptr}, {layer_attr_name + "_ds", layers_attr_ds.ptr}}, {}, {}});
+    write_by_extension(out_filename, m, attr);
     
     std::cout << "save model to " << out_filename << std::endl;
 

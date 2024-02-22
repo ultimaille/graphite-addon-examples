@@ -7,7 +7,9 @@
 
 using namespace UM;
 
-// Propagate an hex layer perpendicular to a given halfedge
+
+
+// Propagate an hex layer perpendicular to a given halfedge (Breadth-First-Search)
 void bfs_cell_propagate(Hexahedra & m, Volume::Halfedge start_h, std::function<void(Volume::Halfedge, int)> f) {
 
     um_assert(m.connected());
@@ -62,7 +64,42 @@ void bfs_cell_propagate(Hexahedra & m, Volume::Halfedge start_h, std::function<v
     }
 }
 
-void _propagate(CellAttribute<bool> & visited, Volume::Halfedge & h, std::function<void(Volume::Halfedge&)> f) {
+void get_layer(Hexahedra & m, CellAttribute<bool> & visited,  int n_iter = 1) {
+
+    // Search for a hex at border
+    std::optional<Volume::Halfedge> found_h;
+    for (auto h : m.iter_halfedges()) {
+        if (!h.opposite_c().active() && !h.next().opposite_c().active()) {
+            found_h = h.opposite_f().next();
+            break;
+        }
+    }
+
+    if (!found_h.has_value()) {
+        std::cout << "not found" << std::endl;
+        return;
+    }
+
+    std::cout << "found: "<< found_h.value() << std::endl;
+
+
+    auto cur_h = found_h.value();
+    int i = 0;
+    //for (int i = 0; i < depth; i++) {
+    while (i < n_iter && cur_h.active()) {
+        std::cout << "it: " << i << std::endl;
+        bfs_cell_propagate(m, cur_h, [&visited](auto h, int _) {
+            visited[h.cell()] = true;
+        });
+
+        //cur_h = cur_h.opposite_f().next().next().opposite_f().opposite_c();
+        cur_h = cur_h.next().opposite_f().opposite_c();
+        std::cout << "found other:" << cur_h<< std::endl;
+        i++;
+    }
+}
+
+void _dfs_cell_propagate(CellAttribute<bool> & visited, Volume::Halfedge & h, std::function<void(Volume::Halfedge&)> f) {
 
     if (f != nullptr)
         f(h);
@@ -80,23 +117,25 @@ void _propagate(CellAttribute<bool> & visited, Volume::Halfedge & h, std::functi
     auto h3 = opp3;
 
     if (opp0.active() && !visited[h0.cell()])
-        _propagate(visited, h0, f);
+        _dfs_cell_propagate(visited, h0, f);
     if (opp1.active() && !visited[h1.cell()])
-        _propagate(visited, h1, f);
+        _dfs_cell_propagate(visited, h1, f);
     if (opp2.active() && !visited[h2.cell()])
-        _propagate(visited, h2, f);
+        _dfs_cell_propagate(visited, h2, f);
     if (opp3.active() && !visited[h3.cell()])
-        _propagate(visited, h3, f);
+        _dfs_cell_propagate(visited, h3, f);
 }
 
-void propagate(Hexahedra & m, Volume::Halfedge & start_h, std::function<void(Volume::Halfedge&)> f) {
+// Propagate an hex layer perpendicular to a given halfedge (Depth-First-Search)
+void dfs_cell_propagate(Hexahedra & m, Volume::Halfedge & start_h, std::function<void(Volume::Halfedge&)> f) {
     um_assert(m.connected());
     CellAttribute<bool> visited(m, false);
-    _propagate(visited, start_h, f);
+    _dfs_cell_propagate(visited, start_h, f);
 }
 
-vec3 middle(vec3 & a, vec3 & b) {
-    return a + (b - a) * .5;
+// Get lerp of two point
+vec3 lerp(vec3 & a, vec3 & b, double t) {
+    return a + (b - a) * t;
 }
 
 int main(int argc, char** argv) {
@@ -106,6 +145,7 @@ int main(int argc, char** argv) {
 
     // Add program parameters
     params.add("input", "model", "").description("Model to process");
+    params.add("int", "edge", "").description("Edge index");
     params.add(Parameters::Type::CellsBool(1), "layer", "layer").description("Layer attribute");
 
     /* Parse program arguments */
@@ -117,27 +157,47 @@ int main(int argc, char** argv) {
 
     std::string filename = params["model"];
     std::string layer_attr_name = params["layer"];
+    int edge = params["edge"];
 
     // Open model
     Hexahedra m;
     VolumeAttributes attr = read_by_extension(filename, m);
+
     // Read layer attribute
     CellAttribute<bool> layer_attr(layer_attr_name, attr, m);
 
-    Volume::Halfedge selected_h(m, 10);
-
-
+    Volume::Halfedge selected_h(m, edge);
 
     m.connect();
 
+    // CellAttribute<bool> peel(m, false);
+    // get_layer(m, peel, 10);
 
+    // std::vector<bool> toto(m.ncells());
+    // for (auto c : m.iter_cells()) {
+    //     if (peel[c])
+    //         toto[c] = true;
+    // }
+
+    // // m.delete_cells(peel.ptr.get()->data);
+    // m.delete_cells(toto);
+
+    // std::string file1 = std::filesystem::path(filename).filename().string();
+    
+    // std::string out_filename1 = "output/" + file1;
+    // write_by_extension(out_filename1, m, {{}, {}, {}, {}});
+    
+    // std::cout << "save model to " << out_filename1 << std::endl;
+    // return 0;
+
+
+    // Count the number of cell in layer (not very smart)
     int n_cells = 0;
     bfs_cell_propagate(m, selected_h, [&n_cells](auto h, int _) {
         n_cells++;
     });
 
     // Split !
-
     std::cout << "ncells: " << m.ncells() << std::endl;
     
     const int n_new_cells = n_cells * 2;
@@ -148,9 +208,8 @@ int main(int argc, char** argv) {
     std::cout << "ncells: " << m.ncells() << std::endl;
     
     int v_id = 0, c_id = 0;
+
     std::vector<bool> to_kill(m.ncells());
-
-
 
     bfs_cell_propagate(m, selected_h, [&](Volume::Halfedge h, int depth) {
 
@@ -168,7 +227,7 @@ int main(int argc, char** argv) {
             // auto cur_h = c.halfedge(lh);
             
             auto cur_h = ha[lh];
-            vec3 mid = middle(cur_h.from().pos(), cur_h.to().pos());
+            vec3 mid = lerp(cur_h.from().pos(), cur_h.to().pos(), .5);
             
             int flc = cur_h.from_corner().id_in_cell();
             int tlc = cur_h.to_corner().id_in_cell();
@@ -207,10 +266,13 @@ int main(int argc, char** argv) {
         to_kill[c] = true;
     });
 
+
     m.delete_cells(to_kill);
 
+    // Reconnect to update connectivity
     m.disconnect();
     m.connect();
+
     CellAttribute<int> depth_attr(m);
     bfs_cell_propagate(m, selected_h, [&](Volume::Halfedge h, int depth) {
         depth_attr[h.cell()] = depth;
