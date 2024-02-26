@@ -106,11 +106,12 @@ int main(int argc, char** argv) {
     // Keep old cell attributes except filter & lace
     std::vector<UM::NamedContainer> cells_attr;
     for (auto a : attr.cells) {
-        if (a.first != layer_attr_name && a.first != "filter")
+        if (a.first != layer_attr_name && a.first != "filter" && a.first != "selection")
             cells_attr.push_back(a);
     }
     cells_attr.push_back({layer_attr_name, layer_attr.ptr});
     cells_attr.push_back({"filter", layer_attr.ptr});
+    cells_attr.push_back({"selection", layer_attr.ptr});
     attr.cells = cells_attr;
 
 
