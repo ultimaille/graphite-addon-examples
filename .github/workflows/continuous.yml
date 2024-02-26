@@ -31,11 +31,14 @@ jobs:
     - name: CMake Build
       run: cmake --build build --parallel
 
-    - name: Run executable
+    - name: Run executable - delete facet
       run: build/delete_facet_addon_${{ matrix.cfg.os }} model=build/catorus.geogram facet_index=0
 
+    - name: Run executable - scaled jacobian
+      run: build/hex_scaled_jabobian_${{ matrix.cfg.os }} model=build/catorus.geogram
+
     - name: Create archive
-      run: tar -czvf addon_examples_${{ matrix.cfg.os }}.tar.gz build/delete_facet_addon_${{ matrix.cfg.os }} build/smoother_addon_${{ matrix.cfg.os }} build/lib/*
+      run: tar -czvf addon_examples_${{ matrix.cfg.os }}.tar.gz build/delete_facet_addon_${{ matrix.cfg.os }} build/smoother_addon_${{ matrix.cfg.os }} build/hex_scaled_jabobian_${{ matrix.cfg.os }} build/lib/*
     -
       name: Deploy
       uses: xresloader/upload-to-github-release@v1
@@ -62,14 +65,20 @@ jobs:
     - name: Release build
       run: cmake --build build --parallel --config Release
 
-    - name: Release run
+    - name: Release run - delete facet
       run: build/Release/delete_facet_addon_win.exe model=build/catorus.geogram facet_index=0
+
+    - name: Release run - scaled jacobian
+      run: build/Release/hex_scaled_jabobian_win.exe model=build/catorus.geogram
 
     - name: Debug build
       run: cmake --build build --parallel --config Debug
 
-    - name: Debug run
+    - name: Debug run - delete facet
       run: build/Debug/delete_facet_addon_win.exe model=build/catorus.geogram facet_index=0
+
+    - name: Debug run - scaled jacobian
+      run: build/Debug/hex_scaled_jabobian_win.exe model=build/catorus.geogram
 
     -
       name: Deploy
@@ -77,7 +86,7 @@ jobs:
       with:
         tags: true
         draft: false
-        file: build/Release/delete_facet_addon_win.exe;build/Release/smoother_addon_win.exe
+        file: build/Release/delete_facet_addon_win.exe;build/Release/smoother_addon_win.exe;build/Release/hex_scaled_jabobian_win.exe
         overwrite: true
         update_latest_release: true
         verbose: true

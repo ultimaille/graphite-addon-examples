@@ -42,7 +42,7 @@ add_executable(smoother_addon smoother_addon.cpp)
 add_executable(hex_layer_select hex_layer_select.cpp)
 add_executable(hex_layer_subdivide hex_layer_subdivide.cpp)
 add_executable(hex_lace_select hex_lace_select.cpp)
-add_executable(hex_scale_jacobian hex_scale_jacobian.cpp)
+add_executable(hex_scaled_jacobian hex_scaled_jacobian.cpp)
 
 # Link binary with ultimaille / param-parser
 target_link_libraries(delete_facet_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
@@ -50,7 +50,7 @@ target_link_libraries(smoother_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $
 target_link_libraries(hex_layer_select  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_layer_subdivide  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_lace_select  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
-target_link_libraries(hex_scale_jacobian  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
+target_link_libraries(hex_scaled_jacobian  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 
 IF (NOT WIN32)
 	target_link_libraries(delete_facet_addon m)
@@ -58,7 +58,7 @@ IF (NOT WIN32)
 	target_link_libraries(hex_layer_select m)
 	target_link_libraries(hex_layer_subdivide m)
 	target_link_libraries(hex_lace_select m)
-	target_link_libraries(hex_scale_jacobian m)
+	target_link_libraries(hex_scaled_jacobian m)
 ENDIF()
 
 set_target_properties(
