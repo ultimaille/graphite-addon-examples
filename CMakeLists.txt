@@ -73,5 +73,11 @@ set_target_properties(
         OUTPUT_NAME "smoother_addon_${OSName}"
 )
 
+set_target_properties(
+  hex_scaled_jacobian
+    PROPERTIES 
+        OUTPUT_NAME "hex_scaled_jacobian_${OSName}"
+)
+
 
 file(COPY assets/catorus.geogram DESTINATION .)
