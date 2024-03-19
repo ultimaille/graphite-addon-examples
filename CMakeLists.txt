@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_RPATH_USE_ORIGIN TRUE)
 
-message("OSName=" ${OSName})
+message("OSName: " ${OSName})
+message("System name: " ${CMAKE_SYSTEM_NAME})
+
 
 # Get config
 get_property(is_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
@@ -42,6 +44,7 @@ add_executable(smoother_addon smoother_addon.cpp)
 add_executable(hex_layer_select hex_layer_select.cpp)
 add_executable(hex_layer_subdivide hex_layer_subdivide.cpp)
 add_executable(hex_lace_select hex_lace_select.cpp)
+# add_executable(hex_ring_select hex_ring_select.cpp)
 add_executable(hex_scaled_jacobian hex_scaled_jacobian.cpp)
 
 # Link binary with ultimaille / param-parser
@@ -50,6 +53,7 @@ target_link_libraries(smoother_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $
 target_link_libraries(hex_layer_select  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_layer_subdivide  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_lace_select  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
+# target_link_libraries(hex_ring_select  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_scaled_jacobian  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 
 IF (NOT WIN32)
@@ -58,8 +62,13 @@ IF (NOT WIN32)
 	target_link_libraries(hex_layer_select m)
 	target_link_libraries(hex_layer_subdivide m)
 	target_link_libraries(hex_lace_select m)
+	# target_link_libraries(hex_ring_select m)
 	target_link_libraries(hex_scaled_jacobian m)
 ENDIF()
+
+if (NOT DEFINED OSName)
+  set(OSName ${CMAKE_SYSTEM_NAME})
+endif()
 
 set_target_properties(
   delete_facet_addon

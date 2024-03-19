@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
     CellAttribute<double> scaled_jacobian_attr(m, 0.);
 
     for (auto c : m.iter_cells()) {
-        scaled_jacobian_attr[c] = c.geom<Hexahedron3>().scaled_jacobian();
+        scaled_jacobian_attr[c] = c.geom<Hexahedron>().scaled_jacobian();
     }
 
     std::cout << "end." << std::endl;
