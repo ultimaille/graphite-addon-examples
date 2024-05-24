@@ -43,18 +43,21 @@ add_executable(delete_facet_addon delete_facet_addon.cpp)
 add_executable(smoother_addon smoother_addon.cpp)
 add_executable(hex_layer_subdivide hex_layer_subdivide.cpp)
 add_executable(hex_scaled_jacobian hex_scaled_jacobian.cpp)
+add_executable(step_loader step_loader.cpp)
 
 # Link binary with ultimaille / param-parser
 target_link_libraries(delete_facet_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(smoother_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_layer_subdivide  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_scaled_jacobian  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
+target_link_libraries(step_loader  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 
 IF (NOT WIN32)
 	target_link_libraries(delete_facet_addon m)
 	target_link_libraries(smoother_addon m)
 	target_link_libraries(hex_layer_subdivide m)
 	target_link_libraries(hex_scaled_jacobian m)
+	target_link_libraries(step_loader m)
 ENDIF()
 
 if (NOT DEFINED OSName)
