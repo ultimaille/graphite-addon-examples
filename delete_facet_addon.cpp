@@ -8,9 +8,13 @@ int main(int argc, char** argv) {
     // Create parameters
     Parameters params;
 
+    params.help = "This addon delete a facet";
+
     // Add program parameters
     params.add("input", "model", "").description("Model to process");
     params.add("int", "facet_index", "0").description("Facet index to remove");
+    params.add("string", "result_path", "").type_of_param("system");
+    params.add("string", "YOP", "x").possible_values("x,y,z").visible("true").type_of_param("system");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);

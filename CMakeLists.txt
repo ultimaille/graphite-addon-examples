@@ -28,7 +28,7 @@ FetchContent_MakeAvailable(ultimaille)
 FetchContent_Declare(
   param_parser
   GIT_REPOSITORY https://github.com/ultimaille/param-parser
-  GIT_TAG        v1.0.0
+  GIT_TAG        v1.0.1
 )
 FetchContent_MakeAvailable(param_parser)
 
@@ -39,30 +39,21 @@ include_directories(${ultimaille_SOURCE_DIR})
 include_directories(${param_parser_SOURCE_DIR})
 
 # Add executable binary
-add_executable(delete_facet_addon delete_face_addon.cpp)
+add_executable(delete_facet_addon delete_facet_addon.cpp)
 add_executable(smoother_addon smoother_addon.cpp)
-add_executable(hex_layer_select hex_layer_select.cpp)
 add_executable(hex_layer_subdivide hex_layer_subdivide.cpp)
-add_executable(hex_lace_select hex_lace_select.cpp)
-# add_executable(hex_ring_select hex_ring_select.cpp)
 add_executable(hex_scaled_jacobian hex_scaled_jacobian.cpp)
 
 # Link binary with ultimaille / param-parser
 target_link_libraries(delete_facet_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(smoother_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
-target_link_libraries(hex_layer_select  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_layer_subdivide  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
-target_link_libraries(hex_lace_select  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
-# target_link_libraries(hex_ring_select  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_scaled_jacobian  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 
 IF (NOT WIN32)
 	target_link_libraries(delete_facet_addon m)
 	target_link_libraries(smoother_addon m)
-	target_link_libraries(hex_layer_select m)
 	target_link_libraries(hex_layer_subdivide m)
-	target_link_libraries(hex_lace_select m)
-	# target_link_libraries(hex_ring_select m)
 	target_link_libraries(hex_scaled_jacobian m)
 ENDIF()
 
@@ -80,6 +71,12 @@ set_target_properties(
   smoother_addon
     PROPERTIES 
         OUTPUT_NAME "smoother_addon_${OSName}"
+)
+
+set_target_properties(
+  hex_layer_subdivide
+    PROPERTIES 
+        OUTPUT_NAME "hex_layer_subdivide_${OSName}"
 )
 
 set_target_properties(
