@@ -14,17 +14,21 @@ int main(int argc, char** argv) {
     params.add("input", "model", "").description("Model to process");
     params.add("int", "facet_index", "0").description("Facet index to remove");
     params.add("string", "result_path", "").type_of_param("system");
-    params.add("string", "YOP", "x").possible_values("x,y,z").visible("true").type_of_param("system");
+    // Just an example on how to use enum
+    params.add("string", "example", "x").possible_values("x,y,z").visible("true").type_of_param("system");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);
 
-    // Print
+    // Get parameters
     std::string s = params["model"];
-    std::cout << "Input model: " << s << std::endl;
-
     std::string filename = params["model"];
     int i = params["facet_index"];
+
+    // Print info
+    std::cout << "Input model: " << s << std::endl;
+
+    std::filesystem::path result_path(params["result_path"]);
 
     // Open model
     Triangles m;
@@ -37,13 +41,16 @@ int main(int argc, char** argv) {
 
     std::cout << "Deleted facet: " << i << std::endl;
 
-    // Output model
-    if (!std::filesystem::is_directory("output"))
+    // Output model to output directory at working dir if no result_path given
+    if (result_path.empty() && !std::filesystem::is_directory("output")) {
         std::filesystem::create_directories("output");
+        result_path = "output";
+    }
 
+    // Get file name and output path
     std::string file = std::filesystem::path(filename).filename().string();
-    
-    std::string out_filename = "output/" + file;
+    std::string out_filename = result_path / file;
+
     write_by_extension(out_filename, m);
     
     return 0;

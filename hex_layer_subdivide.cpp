@@ -147,17 +147,20 @@ int main(int argc, char** argv) {
     params.add("input", "model", "").description("Model to process");
     params.add("int", "edge", "").description("Edge index");
     params.add(Parameters::Type::CellsBool(1), "layer", "layer").description("Layer attribute");
+    params.add(Parameters::Type::String, "result_path", "").type_of_param("system");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);
 
-    // Print
+    // Get parameters
     std::string s = params["model"];
-    std::cout << "Input model: " << s << std::endl;
-
     std::string filename = params["model"];
     std::string layer_attr_name = params["layer"];
     int edge = params["edge"];
+    std::filesystem::path result_path(params["result_path"]);
+
+    // Print info
+    std::cout << "Input model: " << s << std::endl;
 
     // Open model
     Hexahedra m;
@@ -278,13 +281,18 @@ int main(int argc, char** argv) {
         depth_attr[h.cell()] = depth;
     });
 
-    // Output model
-    if (!std::filesystem::is_directory("output"))
-        std::filesystem::create_directories("output");
+    // Save
 
+    // Output model to output directory at working dir if no result_path given
+    if (result_path.empty() && !std::filesystem::is_directory("output")) {
+        std::filesystem::create_directories("output");
+        result_path = "output";
+    }
+
+    // Get file name and output path
     std::string file = std::filesystem::path(filename).filename().string();
-    
-    std::string out_filename = "output/" + file;
+    std::string out_filename = result_path / file;
+
     write_by_extension(out_filename, m, {{}, {{"layer", layer_attr.ptr}, {"depth", depth_attr.ptr}}, {}, {}});
     
     std::cout << "save model to " << out_filename << std::endl;

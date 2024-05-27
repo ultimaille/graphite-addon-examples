@@ -36,11 +36,11 @@ int main(int argc, char** argv) {
 	bool volume = params["volume"];
 	double size_factor = params["size_factor"];
 
-    std::string result_path = params["result_path"];
+    std::filesystem::path result_path(params["result_path"]);
 
 
 	// Out file
-	std::filesystem::path out_filename = std::filesystem::path(result_path) / "out.mesh";
+	std::filesystem::path out_filename = result_path / "out.mesh";
 
 	// Write config file for GMSH
 	std::ofstream conf_file;

@@ -39,14 +39,16 @@ int main(int argc, char** argv) {
     params.add("input", "model", "").description("Model to process");
     params.add(Parameters::Type::VerticesBool(1), "lock_attribute", "").description("Name of attribute to lock");
     params.add(Parameters::Type::Int, "n_iter", "100").description("Number of iterations");
+    params.add(Parameters::Type::String, "result_path", "").type_of_param("system");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);
 
-    // Get args
+    // Get parameters
     std::string filename = params["model"];
     std::string lock_attr_name = params["lock_attribute"];
     int n_iter = params["n_iter"];
+    std::filesystem::path result_path(params["result_path"]);
 
     // Print
     std::cout << "Input model: " << filename << std::endl;
@@ -60,13 +62,19 @@ int main(int argc, char** argv) {
     for (int i = 0; i < n_iter; i ++)
         smooth(m, lock_attr);
     
-    // Output model
-    if (!std::filesystem::is_directory("output"))
-        std::filesystem::create_directories("output");
+    // Save
 
+    // Output model to output directory at working dir if no result_path given
+    if (result_path.empty() && !std::filesystem::is_directory("output")) {
+        std::filesystem::create_directories("output");
+        result_path = "output";
+    }
+
+    // Get file name and output path
     std::string file = std::filesystem::path(filename).filename().string();
-    
-    std::string out_filename = "output/" + file;
+    std::string out_filename = result_path / file;
+
+
     write_by_extension(out_filename, m, {attr.points, attr.facets, attr.corners});
     
     return 0;
