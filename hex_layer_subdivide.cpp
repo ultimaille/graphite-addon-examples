@@ -157,7 +157,7 @@ int main(int argc, char** argv) {
     std::string filename = params["model"];
     std::string layer_attr_name = params["layer"];
     int edge = params["edge"];
-    std::filesystem::path result_path(params["result_path"]);
+    std::filesystem::path result_path((std::string)params["result_path"]);
 
     // Print info
     std::cout << "Input model: " << s << std::endl;
@@ -291,7 +291,7 @@ int main(int argc, char** argv) {
 
     // Get file name and output path
     std::string file = std::filesystem::path(filename).filename().string();
-    std::string out_filename = result_path / file;
+    std::string out_filename = (result_path / file).string();
 
     write_by_extension(out_filename, m, {{}, {{"layer", layer_attr.ptr}, {"depth", depth_attr.ptr}}, {}, {}});
     

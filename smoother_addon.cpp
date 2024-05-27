@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
     std::string filename = params["model"];
     std::string lock_attr_name = params["lock_attribute"];
     int n_iter = params["n_iter"];
-    std::filesystem::path result_path(params["result_path"]);
+    std::filesystem::path result_path((std::string)params["result_path"]);
 
     // Print
     std::cout << "Input model: " << filename << std::endl;
@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
 
     // Get file name and output path
     std::string file = std::filesystem::path(filename).filename().string();
-    std::string out_filename = result_path / file;
+    std::string out_filename = (result_path / file).string();
 
 
     write_by_extension(out_filename, m, {attr.points, attr.facets, attr.corners});

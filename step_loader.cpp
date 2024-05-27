@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
 	bool volume = params["volume"];
 	double size_factor = params["size_factor"];
 
-    std::filesystem::path result_path(params["result_path"]);
+    std::filesystem::path result_path((std::string)params["result_path"]);
 
 
 	// Out file

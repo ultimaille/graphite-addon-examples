@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 
     // Get parameters
     std::string filename = params["model"];
-    std::filesystem::path result_path(params["result_path"]);
+    std::filesystem::path result_path((std::string)params["result_path"]);
 
     // Print info
     std::cout << "Input model: " << filename << std::endl;
@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
 
     // Get file name and output path
     std::string file = std::filesystem::path(filename).filename().string();
-    std::string out_filename = result_path / file;
+    std::string out_filename = (result_path / file).string();
 
     write_by_extension(out_filename, m, {{}, {{"scaled_jacobian", scaled_jacobian_attr.ptr}}, {}, {}});
     

@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
     // Print info
     std::cout << "Input model: " << s << std::endl;
 
-    std::filesystem::path result_path(params["result_path"]);
+    std::filesystem::path result_path((std::string)params["result_path"]);
 
     // Open model
     Triangles m;
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 
     // Get file name and output path
     std::string file = std::filesystem::path(filename).filename().string();
-    std::string out_filename = result_path / file;
+    std::string out_filename = (result_path / file).string();
 
     write_by_extension(out_filename, m);
     
