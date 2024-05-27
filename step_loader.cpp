@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 	params.help = "Load a step file and convert to surface or volume mesh";
 
     // Add program parameters
-    params.add(Parameters::Type::File, "gmsh_path", "").description("GMSH path");
+    params.add(Parameters::Type::File, "gmsh_path", "gmsh").description("GMSH path / name (please add GMSH to you PATH !)");
     params.add(Parameters::Type::File, "step_path", "").description("Step file to load");
     params.add(Parameters::Type::Bool, "volume", "true").description("Convert to volume mesh");
     params.add(Parameters::Type::Double, "size_factor", "1").description("Size factor");
