@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
     // Create parameters
     Parameters params;
 
-    params.help = "This addon delete a facet \n yop";
+    params.help = "This addon delete a facet";
 
     // Add program parameters
     params.add("input", "model", "").description("Model to process");
@@ -16,7 +16,6 @@ int main(int argc, char** argv) {
     params.add("string", "result_path", "").type_of_param("system");
     // Just an example on how to use enum
     params.add("string", "example", "x").possible_values("x,y,z").visible("true").type_of_param("system");
-    params.add("string", "nico", "hello").type_of_param("system");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);
@@ -53,10 +52,6 @@ int main(int argc, char** argv) {
     std::string out_filename = (result_path / file).string();
 
     write_by_extension(out_filename, m);
-
-    std::string nico = params["nico"];
-    std::cout << nico << std::endl;
-
     
     return 0;
 }
