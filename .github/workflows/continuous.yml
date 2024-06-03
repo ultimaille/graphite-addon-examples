@@ -35,10 +35,10 @@ jobs:
       run: build/delete_facet_addon_${{ matrix.cfg.os }} model=build/catorus.geogram facet_index=0
 
     - name: Run executable - scaled jacobian
-      run: build/hex_scaled_jacobian_${{ matrix.cfg.os }} model=build/catorus.geogram
+      run: build/hex_scaled_jacobian_addon_${{ matrix.cfg.os }} model=build/catorus.geogram
 
     - name: Create archive
-      run: tar -czvf addons_${{ matrix.cfg.os }}.tar.gz build/delete_facet_addon_${{ matrix.cfg.os }} build/smoother_addon_${{ matrix.cfg.os }} build/hex_scaled_jacobian_${{ matrix.cfg.os }} build/hex_layer_subdivide_${{ matrix.cfg.os }} build/lib/*
+      run: tar -czvf addons_${{ matrix.cfg.os }}.tar.gz build/delete_facet_addon_${{ matrix.cfg.os }} build/smoother_addon_${{ matrix.cfg.os }} build/hex_layer_subdivide_addon_${{ matrix.cfg.os }} build/hex_scaled_jacobian_addon_${{ matrix.cfg.os }} build/step_loader_addon_${{ matrix.cfg.os }} build/lib/*
     -
       name: Deploy
       uses: xresloader/upload-to-github-release@v1
@@ -69,7 +69,7 @@ jobs:
       run: build/Release/delete_facet_addon_win.exe model=build/catorus.geogram facet_index=0
 
     - name: Release run - scaled jacobian
-      run: build/Release/hex_scaled_jacobian_win.exe model=build/catorus.geogram
+      run: build/Release/hex_scaled_jacobian_addon_win.exe model=build/catorus.geogram
 
     - name: Debug build
       run: cmake --build build --parallel --config Debug
@@ -78,7 +78,7 @@ jobs:
       run: build/Debug/delete_facet_addon_win.exe model=build/catorus.geogram facet_index=0
 
     - name: Debug run - scaled jacobian
-      run: build/Debug/hex_scaled_jacobian_win.exe model=build/catorus.geogram
+      run: build/Debug/hex_scaled_jacobian_addon_win.exe model=build/catorus.geogram
 
     - name: Create archive
       run: Compress-Archive -Path build/Release/* -Destination addons_win.zip
