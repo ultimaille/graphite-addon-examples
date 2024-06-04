@@ -13,14 +13,13 @@ int main(int argc, char** argv) {
 
     // Add program parameters
     params.add("input", "model", "").description("Model to process");
-    params.add(Parameters::Type::String, "result_path", "").type_of_param("system");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);
 
     // Get parameters
     std::string filename = params["model"];
-    std::filesystem::path result_path((std::string)params["result_path"]);
+    std::filesystem::path result_path(params.result_path());
 
     // Print info
     std::cout << "Input model: " << filename << std::endl;

@@ -13,7 +13,6 @@ int main(int argc, char** argv) {
     // Add program parameters
     params.add("input", "model", "").description("Model to process");
     params.add("int", "facet_index", "0").description("Facet index to remove");
-    params.add("string", "result_path", "").type_of_param("system");
     // Just an example on how to use enum
     params.add("string", "example", "x").possible_values("x,y,z").visible("true").type_of_param("system");
 
@@ -28,7 +27,7 @@ int main(int argc, char** argv) {
     // Print info
     std::cout << "Input model: " << s << std::endl;
 
-    std::filesystem::path result_path((std::string)params["result_path"]);
+    std::filesystem::path result_path(params.result_path());
 
     // Open model
     Triangles m;

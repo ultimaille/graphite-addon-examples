@@ -25,7 +25,6 @@ int main(int argc, char** argv) {
     params.add(Parameters::Type::File, "step_path", "").description("Step file to load");
     params.add(Parameters::Type::Bool, "volume", "true").description("Convert to volume mesh");
     params.add(Parameters::Type::Double, "size_factor", "1").description("Size factor");
-    params.add(Parameters::Type::Double, "result_path", "").type_of_param("system");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);
@@ -36,7 +35,7 @@ int main(int argc, char** argv) {
 	bool volume = params["volume"];
 	double size_factor = params["size_factor"];
 
-    std::filesystem::path result_path((std::string)params["result_path"]);
+    std::filesystem::path result_path(params.result_path());
 
 
 	// Out file

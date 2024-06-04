@@ -28,7 +28,7 @@ FetchContent_MakeAvailable(ultimaille)
 FetchContent_Declare(
   param_parser
   GIT_REPOSITORY https://github.com/ultimaille/param-parser
-  GIT_TAG        v1.0.1
+  GIT_TAG        v1.0.3
 )
 FetchContent_MakeAvailable(param_parser)
 

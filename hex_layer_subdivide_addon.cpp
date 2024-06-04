@@ -147,7 +147,6 @@ int main(int argc, char** argv) {
     params.add("input", "model", "").description("Model to process");
     params.add("int", "edge", "").description("Edge index");
     params.add(Parameters::Type::CellsBool(1), "layer", "layer").description("Layer attribute");
-    params.add(Parameters::Type::String, "result_path", "").type_of_param("system");
 
     /* Parse program arguments */
     params.init_from_args(argc, argv);
@@ -157,7 +156,7 @@ int main(int argc, char** argv) {
     std::string filename = params["model"];
     std::string layer_attr_name = params["layer"];
     int edge = params["edge"];
-    std::filesystem::path result_path((std::string)params["result_path"]);
+    std::filesystem::path result_path(params.result_path());
 
     // Print info
     std::cout << "Input model: " << s << std::endl;
