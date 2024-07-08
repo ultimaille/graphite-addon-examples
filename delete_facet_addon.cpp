@@ -19,6 +19,11 @@ int main(int argc, char** argv) {
     /* Parse program arguments */
     params.init_from_args(argc, argv);
 
+    if (params.has_run_from())
+        std::cout << "Run from: " << params.run_from() << std::endl;
+    else 
+        std::cout << "Standalone mode." << std::endl;
+
     // Get parameters
     std::string s = params["model"];
     std::string filename = params["model"];

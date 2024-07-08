@@ -20,15 +20,14 @@ include(FetchContent)
 FetchContent_Declare(
   ultimaille
   GIT_REPOSITORY https://github.com/ssloy/ultimaille
-  # GIT_TAG        v1.1.0
-  GIT_TAG        geom
+  GIT_TAG        v2.0.0
 )
 FetchContent_MakeAvailable(ultimaille)
 
 FetchContent_Declare(
   param_parser
   GIT_REPOSITORY https://github.com/ultimaille/param-parser
-  GIT_TAG        v1.0.3
+  GIT_TAG        v1.0.4
 )
 FetchContent_MakeAvailable(param_parser)
 
