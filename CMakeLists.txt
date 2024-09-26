@@ -31,7 +31,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(param_parser)
 
+# if (DEFINED UltimaillePath)
+#   set(ultimaille_SOURCE_DIR ${UltimaillePath})
+#   link_directories("${ultimaille_SOURCE_DIR}/build/lib")
+#   message("Get ultimaille at specified path")
+# endif()
 
+# message(${ultimaille_SOURCE_DIR})
 
 # Add ultimaille directory to get ultimaille CMakeLists
 include_directories(${ultimaille_SOURCE_DIR})
@@ -43,6 +49,8 @@ add_executable(smoother_addon smoother_addon.cpp)
 add_executable(hex_layer_subdivide_addon hex_layer_subdivide_addon.cpp)
 add_executable(hex_scaled_jacobian_addon hex_scaled_jacobian_addon.cpp)
 add_executable(step_loader_addon step_loader_addon.cpp)
+add_executable(facet_corners_test facet_corners_test.cpp)
+add_executable(tag_feature_lines tag_feature_lines_addon.cpp)
 
 # Link binary with ultimaille / param-parser
 target_link_libraries(delete_facet_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
@@ -50,6 +58,8 @@ target_link_libraries(smoother_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $
 target_link_libraries(hex_layer_subdivide_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(hex_scaled_jacobian_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 target_link_libraries(step_loader_addon  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
+target_link_libraries(facet_corners_test  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
+target_link_libraries(tag_feature_lines  ${CMAKE_DL_LIBS} param-parser ultimaille $<$<BOOL:${OpenMP_CXX_FOUND}>:OpenMP::OpenMP_CXX>)
 
 IF (NOT WIN32)
 	target_link_libraries(delete_facet_addon m)
@@ -57,6 +67,8 @@ IF (NOT WIN32)
 	target_link_libraries(hex_layer_subdivide_addon m)
 	target_link_libraries(hex_scaled_jacobian_addon m)
 	target_link_libraries(step_loader_addon m)
+	target_link_libraries(facet_corners_test m)
+	target_link_libraries(tag_feature_lines m)
 ENDIF()
 
 if (NOT DEFINED OSName)
@@ -91,6 +103,18 @@ set_target_properties(
   step_loader_addon
     PROPERTIES 
         OUTPUT_NAME "step_loader_addon_${OSName}"
+)
+
+set_target_properties(
+  facet_corners_test
+    PROPERTIES 
+        OUTPUT_NAME "facet_corners_test_addon_${OSName}"
+)
+
+set_target_properties(
+  tag_feature_lines
+    PROPERTIES 
+        OUTPUT_NAME "tag_feature_lines_addon_${OSName}"
 )
 
 
