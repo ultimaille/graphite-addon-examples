@@ -40,27 +40,41 @@ int main(int argc, char** argv) {
 	// Read surface
 	Triangles m;
 	read_by_extension(model, m);
-	CornerAttribute<bool> feature_line_attr(m);
+	CornerAttribute<bool> is_feature_attr(m);
 
 	// Read poyline
 	PolyLine p;
 	PolyLineAttributes attributes = read_by_extension(model, p);
 
+	// Duplicate edges to create bi-directional edge
+	int n_edges = p.nedges();
+	int offset = p.create_edges(n_edges);
+
+	for (int i = 0; i < n_edges; i++) {
+		int k = offset + i;
+		p.vert(k, 0) = p.vert(i, 1);
+		p.vert(k, 1) = p.vert(i, 0);
+	}
+
 	m.connect();
+	p.connect();
+
 
 	// Mark halfedge as feature line
 	// May have a smarter way ?
-	for (auto e : p.iter_edges()) {
-		for (auto he : m.iter_halfedges()) {
+	for (auto v : m.iter_vertices()) {
+		PolyLine::Vertex vp(p, v);
 
-			if (e.from() == he.from() && e.to() == he.to()) {
-				feature_line_attr[he] = true;
-				break;
+		for (auto he : v.iter_halfedges()) {
+			for (auto e : vp.iter_edges()) {
+				if (he.to() == e.to())
+					is_feature_attr[he] = true;
 			}
 		}
+
 	}
 
-	write_by_extension(out_filename.string(), m, {{}, {}, {{"feature_line", feature_line_attr.ptr}}});
+	write_by_extension(out_filename.string(), m, {{}, {}, {{"is_feature", is_feature_attr.ptr}}});
 	std::cout << "writed to: " << out_filename << std::endl;
 
 	return 0;
